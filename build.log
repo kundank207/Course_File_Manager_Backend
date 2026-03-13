@@ -1,0 +1,44 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.mitmeerut:CFM_Portal >----------------------
+[INFO] Building CFM_Portal 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ CFM_Portal ---
+[INFO] Deleting C:\Users\kunda\Downloads\CFM-Project\CFM-main\CFM_Backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ CFM_Portal ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ CFM_Portal ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 149 source files with javac [debug parameters release 17] to target\classes
+[INFO] /C:/Users/kunda/Downloads/CFM-Project/CFM-main/CFM_Backend/src/main/java/com/mitmeerut/CFM_Portal/security/jwt/JwtTokenProvider.java: C:\Users\kunda\Downloads\CFM-Project\CFM-main\CFM_Backend\src\main\java\com\mitmeerut\CFM_Portal\security\jwt\JwtTokenProvider.java uses unchecked or unsafe operations.
+[INFO] /C:/Users/kunda/Downloads/CFM-Project/CFM-main/CFM_Backend/src/main/java/com/mitmeerut/CFM_Portal/security/jwt/JwtTokenProvider.java: Recompile with -Xlint:unchecked for details.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/kunda/Downloads/CFM-Project/CFM-main/CFM_Backend/src/main/java/com/mitmeerut/CFM_Portal/Controller/AuthController.java:[118,20] cannot find symbol
+  symbol:   method updateUser(com.mitmeerut.CFM_Portal.Model.User)
+  location: variable userService of type com.mitmeerut.CFM_Portal.Service.UserService
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  10.038 s
+[INFO] Finished at: 2026-02-07T02:28:15+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project CFM_Portal: Compilation failure
+[ERROR] /C:/Users/kunda/Downloads/CFM-Project/CFM-main/CFM_Backend/src/main/java/com/mitmeerut/CFM_Portal/Controller/AuthController.java:[118,20] cannot find symbol
+[ERROR]   symbol:   method updateUser(com.mitmeerut.CFM_Portal.Model.User)
+[ERROR]   location: variable userService of type com.mitmeerut.CFM_Portal.Service.UserService
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
