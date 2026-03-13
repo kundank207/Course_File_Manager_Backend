@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Run stage
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-slim
 WORKDIR /app
 COPY --from=build /app/target/CFM_Portal-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
