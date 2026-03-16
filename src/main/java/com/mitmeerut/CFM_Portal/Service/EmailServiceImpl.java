@@ -15,6 +15,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
+    @org.springframework.scheduling.annotation.Async
     @Override
     public void sendEmail(String to, String subject, String body) {
         try {

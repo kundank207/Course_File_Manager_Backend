@@ -50,10 +50,9 @@ public class ForgotPasswordController {
 
         User user = userRepository.findByEmail(email.trim().toLowerCase()).orElse(null);
         if (user == null) {
-            // Don't reveal if email exists or not (security)
             Map<String, String> response = new HashMap<>();
-            response.put("message", "If this email is registered, you will receive an OTP shortly");
-            return ResponseEntity.ok(response);
+            response.put("error", "Email is not registered");
+            return ResponseEntity.badRequest().body(response);
         }
 
         // Generate 6-digit OTP
