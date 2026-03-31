@@ -1,36 +1,43 @@
 package com.mitmeerut.CFM_Portal.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
+    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173}")
+    private String[] allowedOrigins;
 
-                CorsConfiguration config = new CorsConfiguration();
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
 
-                String allowedOrigins = System.getenv("ALLOWED_ORIGINS");
-                if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
-                        config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
-                } else {
-                        config.setAllowedOrigins(List.of(
-                                        "http://localhost:5000",
-                                        "http://localhost:5173"));
-                }
-                config.setAllowedMethods(List.of(
-                                "GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                config.setAllowedHeaders(List.of("*"));
-                config.setExposedHeaders(List.of("Authorization"));
-                config.setAllowCredentials(true);
+        CorsConfiguration config = new CorsConfiguration();
 
-                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                source.registerCorsConfiguration("/**", config);
+        // Allow configured origins dynamically, meaning we can set APP_CORS_ALLOWED_ORIGINS in Render/AWS
+        config.setAllowedOrigins(Arrays.asList(allowedOrigins));
 
-                return source;
-        }
+        // Allow all standard HTTP methods
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        // Allow standard headers
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
+
+        // Expose Authorization header so frontend can read it if needed
+        config.setExposedHeaders(List.of("Authorization"));
+
+        // Allow credentials (cookies, authorization headers)
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Apply CORS config to all endpoints globally
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 }
