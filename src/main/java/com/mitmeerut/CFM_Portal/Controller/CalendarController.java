@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/calendar")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 public class CalendarController {
 
     private final CalendarEventRepository calendarEventRepository;

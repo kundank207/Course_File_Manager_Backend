@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/archive")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 @PreAuthorize("hasAnyRole('HOD', 'SUBJECTHEAD', 'TEACHER')")
 public class CourseArchiveController {
 

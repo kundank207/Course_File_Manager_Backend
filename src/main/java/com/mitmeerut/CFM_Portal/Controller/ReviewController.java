@@ -17,7 +17,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api/review")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 @PreAuthorize("hasAnyRole('HOD', 'SUBJECTHEAD', 'TEACHER')")
 public class ReviewController {
 

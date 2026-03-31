@@ -11,7 +11,7 @@ import com.mitmeerut.CFM_Portal.Service.BranchService;
 
 @RestController
 @RequestMapping("/api/branch")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 public class BranchController {
 
     @Autowired

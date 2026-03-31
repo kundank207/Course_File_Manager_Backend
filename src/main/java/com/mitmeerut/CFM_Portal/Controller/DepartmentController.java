@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/departments")
-@CrossOrigin(origins = { "http://localhost:5000" }, allowCredentials = "true")
+
 public class DepartmentController {
 
     @Autowired

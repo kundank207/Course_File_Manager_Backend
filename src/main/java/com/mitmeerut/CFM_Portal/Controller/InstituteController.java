@@ -13,7 +13,7 @@ import com.mitmeerut.CFM_Portal.Service.InstituteService;
 
 @RestController
 @RequestMapping("/api/admin/institutes")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 public class InstituteController {
 
     @Autowired

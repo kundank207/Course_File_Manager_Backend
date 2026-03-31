@@ -29,7 +29,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = { "http://localhost:5000" }, allowCredentials = "true")
+
 @org.springframework.security.access.prepost.PreAuthorize("hasAuthority('MANAGE_SYSTEM')")
 public class AdminController {
 

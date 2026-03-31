@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/faculty")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 @org.springframework.security.access.prepost.PreAuthorize("hasAuthority('MANAGE_SYSTEM')")
 public class TeacherAdminController {
 

@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hod/bulk-import")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 @PreAuthorize("hasRole('HOD')")
 public class BulkHodImportController {
 

@@ -13,7 +13,7 @@ import com.mitmeerut.CFM_Portal.Service.CourseService;
 
 @RestController
 @RequestMapping("/api/hod/courses")
-@CrossOrigin(origins = { "http://localhost:5000", "http://localhost:5173" }, allowCredentials = "true")
+
 public class CourseController {
 
 	private CourseService courseService;
