@@ -57,14 +57,13 @@ public class AuthController {
         String email = req.get("email");
         String password = req.get("password");
 
-        boolean ok = userService.login(email, password);
-        if (!ok) {
+        User user = userService.login(email, password);
+        if (user == null) {
             Map<String, String> error = new HashMap<>();
             error.put("message", "Invalid credentials or not approved yet");
             return ResponseEntity.status(401).body(error);
         }
 
-        User user = userService.findByEmail(email);
         List<String> roles = userService.getEffectiveRoles(user);
 
         // 🔥 ROLE PRIORITY: HOD > lastActiveRole > SUBJECTHEAD > DEFAULT

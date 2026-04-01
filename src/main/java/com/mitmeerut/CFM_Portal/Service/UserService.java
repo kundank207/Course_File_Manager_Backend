@@ -8,7 +8,7 @@ public interface UserService {
 
     User registerTeacherUser(String name, String email, String password);
 
-    Boolean login(String email, String password);
+    User login(String email, String password);
 
     List<User> getPendingTeachers();
 

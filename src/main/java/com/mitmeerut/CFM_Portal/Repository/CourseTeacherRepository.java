@@ -16,6 +16,7 @@ public interface CourseTeacherRepository extends JpaRepository<CourseTeacher, Lo
     @Query("""
                 SELECT ct
                 FROM CourseTeacher ct
+                JOIN FETCH ct.course
                 WHERE ct.teacher.id = :teacherId
             """)
     List<CourseTeacher> findByTeacherId(@Param("teacherId") Long teacherId);

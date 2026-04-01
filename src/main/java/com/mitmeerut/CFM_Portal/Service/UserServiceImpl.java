@@ -42,6 +42,9 @@ public class UserServiceImpl implements UserService {
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
+    @Autowired
+    private AsyncEventService asyncEventService;
+
     @Override
     public User registerTeacherUser(String name, String email, String password) {
 
@@ -58,85 +61,36 @@ public class UserServiceImpl implements UserService {
         user.setRole(userRole.TEACHER);
         user.setIsActive(false);
 
-        User savedUser = userRepo.save(user);
-
         Teacher t = new Teacher();
         t.setName(name);
         t.setEmailOfficial(email);
         t.setIsActive(false);
-
         teacherRepo.save(t);
 
-        savedUser.setTeacher(t);
-        userRepo.save(savedUser);
+        user.setTeacher(t);
+        User savedUser = userRepo.save(user);
 
-        // Log activity
-        try {
-            com.mitmeerut.CFM_Portal.Model.Activity_Log log = new com.mitmeerut.CFM_Portal.Model.Activity_Log();
-            log.setActor(null); // Registration is a system event
-            log.setAction("New Registration");
-            log.setTargetType("User");
-            log.setTargetId(savedUser.getId());
-
-            Map<String, String> logDetails = new HashMap<>();
-            logDetails.put("event", "New teacher registration");
-            logDetails.put("name", name);
-            logDetails.put("email", email);
-            log.setDetails(objectMapper.writeValueAsString(logDetails));
-
-            activityLogRepository.save(log);
-        } catch (Exception e) {
-            e.printStackTrace(); // Log but don't fail registration
-        }
-
-        // Notify Admin
-        List<User> admins = userRepo.findByRole(userRole.ADMIN);
-        for (User admin : admins) {
-            com.mitmeerut.CFM_Portal.Model.Notification note = new com.mitmeerut.CFM_Portal.Model.Notification();
-            note.setUser(admin);
-            note.setType("NEW_USER_REGISTRATION");
-            note.setTitle("New Teacher Registration");
-            note.setMessage(name + " has registered and is pending approval.");
-
-            try {
-                Map<String, Object> payload = new HashMap<>();
-                payload.put("userId", savedUser.getId());
-                payload.put("name", name);
-                payload.put("email", email);
-                note.setPayload(objectMapper.writeValueAsString(payload));
-            } catch (Exception e) {
-                note.setPayload("{}");
-            }
-
-            note.setCreatedAt(java.time.LocalDateTime.now());
-            note.setIsRead(false);
-
-            notificationService.send(note);
-        }
-
-        String approveLink = baseUrl + "/api/admin/approve/" + savedUser.getId();
-        emailService.sendEmail(
-                adminEmail,
-                "New Teacher Registration",
-                "A new teacher registered.\n\nName: " + name +
-                        "\nEmail: " + email +
-                        "\nApprove: " + approveLink);
+        // 🔥 ASYNC TASKS: Offloading heavy operations to background thread
+        asyncEventService.logRegistrationActivity(savedUser.getId(), name, email);
+        asyncEventService.notifyAdminsOfRegistration(savedUser.getId(), name, email);
 
         return savedUser;
     }
 
     @Override
-    public Boolean login(String email, String password) {
+    public User login(String email, String password) {
 
         User user = userRepo.findByEmail(email).orElse(null);
         if (user == null)
-            return false;
+            return null;
 
         if (!Boolean.TRUE.equals(user.getIsActive()))
-            return false;
+             return null;
 
-        // return user.getPasswordHash().equals(password);
-        return passwordEncoder.matches(password, user.getPasswordHash());
+        if (passwordEncoder.matches(password, user.getPasswordHash())) {
+            return user;
+        }
+        return null;
     }
 
     @Override
