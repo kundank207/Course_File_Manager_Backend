@@ -40,13 +40,19 @@ public class AuthController {
         String email = req.get("email");
         String password = req.get("password");
 
-        User user = userService.registerTeacherUser(name, email, password);
+        try {
+            User user = userService.registerTeacherUser(name, email, password);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Registration submitted. Wait for admin approval.");
-        response.put("id", user.getId());
-        response.put("email", user.getEmail());
-        return ResponseEntity.ok(response);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Registration submitted. Wait for admin approval.");
+            response.put("id", user.getId());
+            response.put("email", user.getEmail());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 
     // ---------------- LOGIN ----------------

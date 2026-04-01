@@ -51,9 +51,6 @@ public class UserServiceImpl implements UserService {
         if (userRepo.existsByEmail(email))
             throw new RuntimeException("Email already registered!");
 
-        if (userRepo.existsByUsername(name))
-            throw new RuntimeException("Username already exists!");
-
         User user = new User();
         user.setUsername(name);
         user.setEmail(email);
