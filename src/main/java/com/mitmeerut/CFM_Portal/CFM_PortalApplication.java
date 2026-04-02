@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
+@org.springframework.cache.annotation.EnableCaching
 public class CFM_PortalApplication {
 
 	public static void main(String[] args) {

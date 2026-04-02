@@ -270,7 +270,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> getHodList() {
 
-        List<User> hodUsers = userRepo.findByRole(User.userRole.HOD);
+        java.util.List<User> hodUsers = userRepo.findByRole(User.userRole.HOD, org.springframework.data.domain.Pageable.unpaged()).getContent();
 
         List<Teacher> list = new ArrayList<>();
 

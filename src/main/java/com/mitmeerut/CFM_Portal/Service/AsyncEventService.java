@@ -62,7 +62,7 @@ public class AsyncEventService {
 
     @Async("taskExecutor")
     public void notifyAdminsOfRegistration(Long userId, String name, String email) {
-        List<User> admins = userRepo.findByRole(User.userRole.ADMIN);
+        java.util.List<User> admins = userRepo.findByRole(User.userRole.ADMIN, org.springframework.data.domain.Pageable.unpaged()).getContent();
         for (User admin : admins) {
             Notification note = new Notification();
             note.setUser(admin);

@@ -20,17 +20,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByTeacherId(Long teacherId);
 
-    List<User> findByRoleAndIsActive(userRole role, Boolean isActive);
+    org.springframework.data.domain.Page<User> findByRoleAndIsActive(userRole role, Boolean isActive, org.springframework.data.domain.Pageable pageable);
 
-    // User findByTeacher(Teacher teacher);
-
-    List<User> findByIsActiveTrue();
+    org.springframework.data.domain.Page<User> findByIsActiveTrue(org.springframework.data.domain.Pageable pageable);
 
     long countByIsActiveTrue();
 
-    List<User> findByRole(User.userRole role);
+    long countByRole(User.userRole role);
 
-    List<User> findByRoleIn(List<User.userRole> roles);
+    org.springframework.data.domain.Page<User> findByRole(User.userRole role, org.springframework.data.domain.Pageable pageable);
+
+    org.springframework.data.domain.Page<User> findByRoleIn(java.util.List<User.userRole> roles, org.springframework.data.domain.Pageable pageable);
 
     Optional<User> findByTeacher(Teacher teacher);
 

@@ -42,7 +42,7 @@ public class RoleController {
             try {
                 // Count users with this role
                 User.userRole roleEnum = User.userRole.valueOf(rp.getRoleName());
-                int userCount = userRepository.findByRole(roleEnum).size();
+                long userCount = userRepository.countByRole(roleEnum);
 
                 // Parse permissions JSON
                 List<String> permissions = objectMapper.readValue(
@@ -67,7 +67,7 @@ public class RoleController {
                 .map(rp -> {
                     try {
                         User.userRole roleEnum = User.userRole.valueOf(rp.getRoleName());
-                        int userCount = userRepository.findByRole(roleEnum).size();
+                        long userCount = userRepository.countByRole(roleEnum);
                         List<String> permissions = objectMapper.readValue(
                                 rp.getPermissions(),
                                 new TypeReference<List<String>>() {
@@ -103,7 +103,7 @@ public class RoleController {
 
             // Return updated role
             User.userRole roleEnum = User.userRole.valueOf(updated.getRoleName());
-            int userCount = userRepository.findByRole(roleEnum).size();
+            long userCount = userRepository.countByRole(roleEnum);
 
             return ResponseEntity.ok(new RoleDto(
                     updated.getId(),

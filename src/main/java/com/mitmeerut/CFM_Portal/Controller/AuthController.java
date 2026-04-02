@@ -63,10 +63,21 @@ public class AuthController {
         String email = req.get("email");
         String password = req.get("password");
 
-        User user = userService.login(email, password);
+        User user = null;
+        try {
+            user = userService.login(email, password);
+        } catch (RuntimeException e) {
+            if ("NOT_APPROVED".equals(e.getMessage())) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Account not approved yet by Admin");
+                return ResponseEntity.status(401).body(error);
+            }
+            throw e;
+        }
+
         if (user == null) {
             Map<String, String> error = new HashMap<>();
-            error.put("message", "Invalid credentials or not approved yet");
+            error.put("message", "Incorrect Email or Password");
             return ResponseEntity.status(401).body(error);
         }
 

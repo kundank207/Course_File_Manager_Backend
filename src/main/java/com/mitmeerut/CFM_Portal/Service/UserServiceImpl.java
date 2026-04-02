@@ -79,25 +79,26 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepo.findByEmail(email).orElse(null);
         if (user == null)
-            return null;
+            return null; // Not found
 
-        if (!Boolean.TRUE.equals(user.getIsActive()))
-             return null;
+        if (!Boolean.TRUE.equals(user.getIsActive())) {
+             throw new RuntimeException("NOT_APPROVED"); // Special flag for controller
+        }
 
         if (passwordEncoder.matches(password, user.getPasswordHash())) {
             return user;
         }
-        return null;
+        return null; // Wrong password
     }
 
     @Override
-    public List<User> getPendingTeachers() {
-        return userRepo.findByRoleAndIsActive(userRole.TEACHER, false);
+    public org.springframework.data.domain.Page<User> getPendingTeachers(org.springframework.data.domain.Pageable pageable) {
+        return userRepo.findByRoleAndIsActive(userRole.TEACHER, false, pageable);
     }
 
     @Override
-    public List<User> getAllTeachers() {
-        return userRepo.findByRole(userRole.TEACHER);
+    public org.springframework.data.domain.Page<User> getAllTeachers(org.springframework.data.domain.Pageable pageable) {
+        return userRepo.findByRole(userRole.TEACHER, pageable);
     }
 
     @Override

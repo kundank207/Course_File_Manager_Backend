@@ -115,7 +115,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         try {
             // Map role name to User.userRole enum
             User.userRole roleEnum = User.userRole.valueOf(roleName);
-            List<User> affectedUsers = userRepository.findByRole(roleEnum);
+            java.util.List<User> affectedUsers = userRepository.findByRole(roleEnum, org.springframework.data.domain.Pageable.unpaged()).getContent();
 
             for (User user : affectedUsers) {
                 // Create in-app notification with detailed payload

@@ -8,7 +8,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 @Data
 @Entity
-@Table(name = "Department")
+@Table(name = "Department", indexes = {
+    @Index(name = "idx_dept_institute", columnList = "institute_id"),
+    @Index(name = "idx_dept_hod", columnList = "hod_id")
+})
 public class Department {
 
     @Id

@@ -10,9 +10,9 @@ public interface UserService {
 
     User login(String email, String password);
 
-    List<User> getPendingTeachers();
+    org.springframework.data.domain.Page<User> getPendingTeachers(org.springframework.data.domain.Pageable pageable);
 
-    List<User> getAllTeachers();
+    org.springframework.data.domain.Page<User> getAllTeachers(org.springframework.data.domain.Pageable pageable);
 
     User approveUser(Long userId);
 

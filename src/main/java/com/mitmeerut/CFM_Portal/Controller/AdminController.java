@@ -67,14 +67,20 @@ public class AdminController {
         private com.mitmeerut.CFM_Portal.Service.NotificationService notificationService;
 
         @GetMapping("/pending-teachers")
-        public ResponseEntity<List<User>> getPendingTeachers() {
-                List<User> pending = userService.getPendingTeachers();
+        public ResponseEntity<org.springframework.data.domain.Page<User>> getPendingTeachers(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+                org.springframework.data.domain.Pageable pageable = org.springframework.data.util.Streamable.of(org.springframework.data.domain.PageRequest.of(page, size)).stream().findFirst().get(); // Simplified for now, will use proper import later
+                // Actually, let's use the standard way:
+                org.springframework.data.domain.Page<User> pending = userService.getPendingTeachers(org.springframework.data.domain.PageRequest.of(page, size));
                 return ResponseEntity.ok(pending);
         }
 
         @GetMapping("/teachers")
-        public ResponseEntity<List<User>> getAllTeachers() {
-                return ResponseEntity.ok(userService.getAllTeachers());
+        public ResponseEntity<org.springframework.data.domain.Page<User>> getAllTeachers(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+                return ResponseEntity.ok(userService.getAllTeachers(org.springframework.data.domain.PageRequest.of(page, size)));
         }
 
         @PostMapping("/approve/{userId}")
@@ -126,27 +132,29 @@ public class AdminController {
         }
 
         @GetMapping("/hods")
-        public ResponseEntity<List<Map<String, Object>>> getHodList() {
-                // Task: Only fetch users with role = HOD
-                List<User> users = userRepository.findByRole(User.userRole.HOD);
+        public ResponseEntity<org.springframework.data.domain.Page<Map<String, Object>>> getHodList(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+                org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+                org.springframework.data.domain.Page<User> users = userRepository.findByRole(User.userRole.HOD, pageable);
 
-                List<Map<String, Object>> result = users.stream().map(u -> {
+                org.springframework.data.domain.Page<Map<String, Object>> result = users.map(u -> {
                         Map<String, Object> map = new HashMap<>();
                         map.put("id", u.getId());
                         map.put("email", u.getEmail());
-                        // Resolve name from Teacher entity if available, else username
                         String name = u.getUsername();
                         if (u.getTeacher() != null && u.getTeacher().getName() != null) {
                                 name = u.getTeacher().getName();
                         }
                         map.put("name", name);
                         return map;
-                }).collect(Collectors.toList());
+                });
 
                 return ResponseEntity.ok(result);
         }
 
         @GetMapping("/dashboard/stats")
+        @org.springframework.cache.annotation.Cacheable(value = "dashboardStats")
         public ResponseEntity<Map<String, Object>> getDashboardStats() {
                 // TASK: Count ALL users from DB (exactly matching SELECT COUNT(*) FROM users)
                 long totalUsers = userRepository.count();
@@ -174,6 +182,7 @@ public class AdminController {
         }
 
         @GetMapping("/dashboard/growth")
+        @org.springframework.cache.annotation.Cacheable(value = "systemGrowth")
         public ResponseEntity<List<Map<String, Object>>> getSystemGrowth() {
                 // Get real stats from DB
                 List<Object[]> stats = userRepository.getGrowthStats();
@@ -407,7 +416,7 @@ public class AdminController {
                                 User.userRole.HOD,
                                 User.userRole.SUBJECTHEAD);
 
-                List<User> faculty = userRepository.findByRoleIn(facultyRoles);
+                java.util.List<User> faculty = userRepository.findByRoleIn(facultyRoles, org.springframework.data.domain.Pageable.unpaged()).getContent();
 
                 List<ChatTeacherDTO> dtos = faculty.stream()
                                 .map(u -> {
